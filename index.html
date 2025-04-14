@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motorcycle Doctor</title>
+  <style>
+    body { font-family: sans-serif; background: #1f1f1f; color: #f4f4f4; padding: 2rem; }
+    h1 { color: #ff3c00; }
+    label, input, select, textarea, button { display: block; margin: 1rem 0; width: 100%; max-width: 600px; }
+    button { background: #ff3c00; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; }
+    .respuesta { margin-top: 2rem; padding: 1rem; background: #2b2b2b; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>🏍️ Motorcycle Doctor</h1>
+  <label>Marca:</label>
+  <input id="marca" placeholder="Ej. Yamaha">
+
+  <label>Modelo:</label>
+  <input id="modelo" placeholder="Ej. Ténéré 700">
+
+  <label>Descripción del fallo:</label>
+  <textarea id="fallo" rows="4" placeholder="Describe el problema de tu moto..."></textarea>
+
+  <button onclick="consultarIA()">Consultar a la IA</button>
+
+  <div id="respuesta" class="respuesta"></div>
+
+  <script>
+    async function consultarIA() {
+      const marca = document.getElementById('marca').value;
+      const modelo = document.getElementById('modelo').value;
+      const fallo = document.getElementById('fallo').value;
+
+      const respuestaDiv = document.getElementById('respuesta');
+      respuestaDiv.innerHTML = "Consultando a la IA...";
+
+      const res = await fetch('/api/consulta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ marca, modelo, fallo })
+      });
+
+      const data = await res.json();
+      respuestaDiv.innerHTML = `<strong>Diagnóstico:</strong><br>${data.resultado}`;
+    }
+  </script>
+</body>
+</html>
